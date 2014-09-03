@@ -4,7 +4,9 @@ PODS:
     - Expecta
     - FBSnapshotTestCase
   - FBSnapshotTestCase (1.1)
-  - loudspeaker (0.1.0)
+  - loudspeaker (0.1.0):
+    - Masonry (~> 0.5)
+  - Masonry (0.5.3)
   - Specta (0.2.1)
 
 DEPENDENCIES:
@@ -22,7 +24,8 @@ SPEC CHECKSUMS:
   Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
   Expecta+Snapshots: 30c28e3d8104665ee70e32df1cfc030bb37a8a6c
   FBSnapshotTestCase: 9053afee1d66b4c7c313fcb0ae582a5e47bea9d0
-  loudspeaker: 0aa1411b58777478e6d4a6c264133351f1b760d0
+  loudspeaker: 305c44dbedaaa7821c9ab1a82661482129bdb2d7
+  Masonry: 35368c2ca9577ca87722c12fc52c4bad9b1c1516
   Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
 
 COCOAPODS: 0.33.1

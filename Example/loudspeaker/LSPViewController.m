@@ -8,9 +8,16 @@
 
 #import "LSPViewController.h"
 
+
 @interface LSPViewController ()
 
+@property (nonatomic, strong) LSPAudioViewController *audioVC;
+
+- (void)audioViewControllerSetup;
+- (void)playAudioWithURL:(NSURL *)audioURL;
+
 @end
+
 
 @implementation LSPViewController
 
@@ -20,10 +27,96 @@
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
-- (void)didReceiveMemoryWarning
+
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
 }
+
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    NSURL *audioURL = [[NSBundle mainBundle] URLForResource:@"Nyan-Cat" withExtension:@"mp3"];
+    [self playAudioWithURL:audioURL];
+}
+
+
+- (void)playAudioWithURL:(NSURL *)audioURL
+{
+    LSPAudioViewController *audioVC = self.audioVC;
+    
+    [audioVC playAudioWithURL:audioURL];
+    [self audioViewControllerSetup];
+}
+
+
+- (void)audioViewControllerSetup
+{
+    LSPAudioViewController *audioVC = self.audioVC;
+    
+    if (audioVC.parentViewController == self) return;
+    
+    audioVC.delegate = self;
+    [self.view addSubview:audioVC.view];
+    
+    [audioVC assignConstraintsToView:self.view];
+    [self addChildViewController:audioVC];
+    
+    float bottomOffset = audioVC.bottomConstraint.constant;
+    [self.view layoutIfNeeded];
+    audioVC.bottomConstraint.constant = CGRectGetHeight(audioVC.view.frame) + ABS(bottomOffset);
+    [self.view layoutIfNeeded];
+    
+    NSTimeInterval duration = .666f;
+    NSTimeInterval delay = 0;
+    UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut);
+    
+    __weak typeof(self) weakSelf = self;
+    [UIView animateWithDuration:duration delay:delay options:options animations:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        audioVC.bottomConstraint.constant = bottomOffset;
+        
+        [strongSelf.view layoutIfNeeded];
+    } completion:nil];
+}
+
+
+- (void)audioViewController:(LSPAudioViewController *)viewController willClosePlayer:(LSPAudioPlayer *)player
+{
+    __weak typeof(self) weakSelf = self;
+    [weakSelf.view layoutIfNeeded];
+    
+    NSTimeInterval duration = .666f;
+    NSTimeInterval delay = 0;
+    UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut);
+    
+    [UIView animateWithDuration:duration delay:delay options:options animations:^{
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        float belowBottom = ABS(viewController.bottomConstraint.constant) + CGRectGetHeight(viewController.view.frame);
+        viewController.bottomConstraint.constant = belowBottom;
+        
+        [strongSelf.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        __strong typeof(weakSelf) strongSelf = weakSelf;
+        
+        [strongSelf.audioVC reset];
+        strongSelf.audioVC = nil;
+    }];
+}
+
+
+- (LSPAudioViewController *)audioVC
+{
+    if (!_audioVC)
+    {
+        _audioVC = LSPAudioViewController.new;
+    }
+    
+    return _audioVC;
+}
+
 
 @end

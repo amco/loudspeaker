@@ -1,0 +1,1 @@
+PODS_LOUDSPEAKER_LOUDSPEAKER_OTHER_LDFLAGS = -framework AVFoundation -framework UIKit

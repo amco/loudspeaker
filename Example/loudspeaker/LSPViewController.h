@@ -6,8 +6,9 @@
 //  Copyright (c) 2014 Adam Yanalunas. All rights reserved.
 //
 
+#import <LSPAudioViewController.h>
 #import <UIKit/UIKit.h>
 
-@interface LSPViewController : UIViewController
+@interface LSPViewController : UIViewController <LSPAudioViewControllerDelegate>
 
 @end
