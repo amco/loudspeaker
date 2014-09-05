@@ -17,8 +17,15 @@ NSString *const LSPAudioPlayerStop = @"loudspeaker.audio.stop";
 
 + (UIImage *)imageNamed:(NSString *)name type:(NSString *)type
 {
+    CGFloat scale = [UIScreen mainScreen].scale;
     static NSString *bundleName = @"loudspeaker.bundle";
     NSString *resourceName = [NSString stringWithFormat:@"%@/%@", bundleName, name];
+    
+    if (scale > 1)
+    {
+        NSString *scaleAmount = [NSString stringWithFormat:@"@%ix", (int)scale];
+        resourceName = [resourceName stringByAppendingString:scaleAmount];
+    }
     
     NSString *extension = type ?: @"png";
     NSURL *url = [[NSBundle mainBundle] URLForResource:resourceName withExtension:extension];
@@ -30,7 +37,7 @@ NSString *const LSPAudioPlayerStop = @"loudspeaker.audio.stop";
         CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef) imageData);
         CGImageRef imageRef = CGImageCreateWithPNGDataProvider(provider, NULL, YES, kCGRenderingIntentDefault);
         
-        image = [UIImage imageWithCGImage:imageRef];
+        image = [UIImage imageWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
         
         CFRelease(imageRef);
         CFRelease(provider);
