@@ -25,8 +25,6 @@
 @end
 
 
-@class ABAudioURL, ABBook;
-
 @interface LSPAudioViewController : UIViewController
 
 @property (nonatomic, strong) NSLayoutConstraint *bottomConstraint;
