@@ -12,7 +12,9 @@
 @interface LSPViewController : UIViewController <LSPAudioViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *demoButton;
+@property (weak, nonatomic) IBOutlet UIButton *harlequinButton;
 
 - (IBAction)launchDemo:(id)sender;
+- (IBAction)launchHarlequinDemo:(id)sender;
 
 @end

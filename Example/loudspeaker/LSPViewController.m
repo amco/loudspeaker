@@ -14,6 +14,7 @@
 @property (nonatomic, strong) LSPAudioViewController *audioVC;
 
 - (void)audioViewControllerSetup;
+- (void)configureDemo:(id)sender;
 - (void)playAudioWithURL:(NSURL *)audioURL;
 
 @end
@@ -22,37 +23,50 @@
 @implementation LSPViewController
 
 
-#pragma mark - Lifecycle
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-}
-
-
 #pragma mark - Demo
 - (IBAction)launchDemo:(id)sender
 {
     self.demoButton.enabled = NO;
+    self.harlequinButton.enabled = NO;
+    
+    [self configureDemo:sender];
     
     NSURL *audioURL = [[NSBundle mainBundle] URLForResource:@"Nyan-Cat" withExtension:@"mp3"];
     [self playAudioWithURL:audioURL];
 }
 
 
+- (IBAction)launchHarlequinDemo:(id)sender
+{
+    [self launchDemo:sender];
+}
+
+
+- (void)configureDemo:(id)sender
+{
+    if (sender == self.harlequinButton)
+    {
+        self.audioVC.view.progressView.foregroundColor = UIColor.redColor;
+        self.audioVC.view.progressView.backgroundColor = UIColor.blueColor;
+        self.audioVC.view.backgroundColor = UIColor.greenColor;
+        self.audioVC.view.playbackTimeLabel.textColor = UIColor.brownColor;
+        self.audioVC.view.titleLabel.textColor = UIColor.yellowColor;
+    }
+    else
+    {
+        self.audioVC.view.progressView.foregroundColor = [UIColor colorWithRed:88/255. green:199/255. blue:226/255. alpha:1];
+        self.audioVC.view.progressView.backgroundColor = [UIColor colorWithWhite:207/255. alpha:1];
+        self.audioVC.view.backgroundColor = [UIColor colorWithWhite:238/255. alpha:1];
+        self.audioVC.view.playbackTimeLabel.textColor = [UIColor colorWithWhite:102/255. alpha:1];
+        self.audioVC.view.titleLabel.textColor = [UIColor colorWithWhite:102/255. alpha:1];
+    }
+}
+
 
 #pragma mark - Player
 - (void)playAudioWithURL:(NSURL *)audioURL
 {
-    LSPAudioViewController *audioVC = self.audioVC;
-    
-    [audioVC playAudioWithURL:audioURL];
+    [self.audioVC playAudioWithURL:audioURL];
     [self audioViewControllerSetup];
 }
 
@@ -112,6 +126,7 @@
         strongSelf.audioVC = nil;
         
         strongSelf.demoButton.enabled = YES;
+        strongSelf.harlequinButton.enabled = YES;
     }];
 }
 

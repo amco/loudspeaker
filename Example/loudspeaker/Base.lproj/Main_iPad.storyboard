@@ -26,15 +26,28 @@
                                     <action selector="launchDemo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="842-cy-fVd"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OTg-FG-6Nq">
+                                <rect key="frame" x="301" y="535" width="167" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Launch Harlequin player">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="launchHarlequinDemo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="aD6-Gd-GoV"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerX" secondItem="OTg-FG-6Nq" secondAttribute="centerX" id="A7B-vi-aNj"/>
+                            <constraint firstItem="OTg-FG-6Nq" firstAttribute="top" secondItem="ioP-aO-pqb" secondAttribute="bottom" constant="8" id="F7l-5P-ECh"/>
                             <constraint firstAttribute="centerX" secondItem="ioP-aO-pqb" secondAttribute="centerX" id="o77-wQ-dV2"/>
                             <constraint firstAttribute="centerY" secondItem="ioP-aO-pqb" secondAttribute="centerY" id="zTn-fY-yTz"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="demoButton" destination="ioP-aO-pqb" id="uPG-XF-hOz"/>
+                        <outlet property="harlequinButton" destination="OTg-FG-6Nq" id="2JM-Wu-dWi"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
