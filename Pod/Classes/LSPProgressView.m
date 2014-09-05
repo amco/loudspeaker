@@ -47,7 +47,7 @@
 {
     [self setupViews];
     [self setForegroundColor:[UIColor colorWithRed:88/255. green:199/255. blue:226/255. alpha:1]];
-    [self setBackgroundColor:UIColor.whiteColor];
+    [self setBackgroundColor:[UIColor colorWithWhite:207/255. alpha:1]];
 }
 
 

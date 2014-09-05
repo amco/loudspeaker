@@ -5,7 +5,7 @@
 //  Copyright (c) 2014 Amco International Education Services, LLC. All rights reserved.
 //
 
-@class LSPProgressView;
+#import "LSPProgressView.h"
 
 @interface LSPAudioView : UIView
 

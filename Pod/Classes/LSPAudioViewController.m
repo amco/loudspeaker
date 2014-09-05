@@ -22,7 +22,6 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 @property (nonatomic, weak) AVQueuePlayer *audioQueuePlayer;
 @property (nonatomic) BOOL playing;
 @property (nonatomic, strong) id progressObserver;
-@property (nonatomic, strong) LSPAudioView *view;
 
 - (void)closeButtonPressed:(UIButton *)button;
 - (void)handleTimelineTap:(UITapGestureRecognizer *)gesture;

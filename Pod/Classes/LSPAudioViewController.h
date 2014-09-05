@@ -6,6 +6,7 @@
 //
 
 #import <CoreMedia/CMTime.h>
+#import "LSPAudioView.h"
 
 @class LSPAudioPlayer, LSPAudioViewController;
 
@@ -33,6 +34,7 @@
 @property (nonatomic) CMTime seekTolerance;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) NSURL *URL;
+@property (nonatomic, strong) LSPAudioView *view;
 
 - (void)assignConstraintsToView:(UIView *)view;
 - (void)close;

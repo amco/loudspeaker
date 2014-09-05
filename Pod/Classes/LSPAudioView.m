@@ -165,9 +165,6 @@
     if (!_progressView)
     {
         _progressView = [LSPProgressView newAutoLayoutView];
-        
-        [_progressView setForegroundColor:[UIColor colorWithRed:88/255. green:199/255. blue:226/255. alpha:1]];
-        [_progressView setBackgroundColor:[UIColor colorWithWhite:207/255. alpha:1]];
     }
     
     return _progressView;
