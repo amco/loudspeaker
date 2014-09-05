@@ -21,6 +21,8 @@
 
 @implementation LSPViewController
 
+
+#pragma mark - Lifecycle
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -34,14 +36,18 @@
 }
 
 
-- (void)viewDidAppear:(BOOL)animated
+#pragma mark - Demo
+- (IBAction)launchDemo:(id)sender
 {
-    [super viewDidAppear:animated];
+    self.demoButton.enabled = NO;
+    
     NSURL *audioURL = [[NSBundle mainBundle] URLForResource:@"Nyan-Cat" withExtension:@"mp3"];
     [self playAudioWithURL:audioURL];
 }
 
 
+
+#pragma mark - Player
 - (void)playAudioWithURL:(NSURL *)audioURL
 {
     LSPAudioViewController *audioVC = self.audioVC;
@@ -104,10 +110,13 @@
         
         [strongSelf.audioVC reset];
         strongSelf.audioVC = nil;
+        
+        strongSelf.demoButton.enabled = YES;
     }];
 }
 
 
+#pragma mark - Properties
 - (LSPAudioViewController *)audioVC
 {
     if (!_audioVC)

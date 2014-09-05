@@ -11,4 +11,8 @@
 
 @interface LSPViewController : UIViewController <LSPAudioViewControllerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIButton *demoButton;
+
+- (IBAction)launchDemo:(id)sender;
+
 @end
