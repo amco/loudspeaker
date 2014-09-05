@@ -33,7 +33,6 @@ __strong static AVQueuePlayer* _player;
 {
     dispatch_once(&playerToken, ^{
         _player = AVQueuePlayer.new;
-        _player.muted = YES;
     });
     return _player;
 }
