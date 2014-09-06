@@ -46,5 +46,5 @@
 #define COCOAPODS_POD_AVAILABLE_loudspeaker
 #define COCOAPODS_VERSION_MAJOR_loudspeaker 0
 #define COCOAPODS_VERSION_MINOR_loudspeaker 1
-#define COCOAPODS_VERSION_PATCH_loudspeaker 0
+#define COCOAPODS_VERSION_PATCH_loudspeaker 1
 
