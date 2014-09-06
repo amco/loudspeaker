@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "loudspeaker"
-  s.version          = "0.1.0"
+  s.version          = "0.1.1"
   s.summary          = "An AVQueuePlayer-backed audio player with a modern, minimal UI"
   s.description      = <<-DESC
                        An audio player with a modern, minimal UI. Powered by AVQueuePlayer.
