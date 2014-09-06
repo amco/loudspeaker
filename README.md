@@ -1,6 +1,6 @@
 # loudspeaker
 
-[![CI Status](http://img.shields.io/travis/Adam Yanalunas/loudspeaker.svg?style=flat)](https://travis-ci.org/Adam Yanalunas/loudspeaker)
+[![CI Status](http://img.shields.io/travis/amco/loudspeaker.svg?style=flat)](https://travis-ci.org/amco/loudspeaker)
 [![Version](https://img.shields.io/cocoapods/v/loudspeaker.svg?style=flat)](http://cocoadocs.org/docsets/loudspeaker)
 [![License](https://img.shields.io/cocoapods/l/loudspeaker.svg?style=flat)](http://cocoadocs.org/docsets/loudspeaker)
 [![Platform](https://img.shields.io/cocoapods/p/loudspeaker.svg?style=flat)](http://cocoadocs.org/docsets/loudspeaker)
