@@ -7,6 +7,7 @@ PODS:
   - loudspeaker (0.1.0):
     - Masonry (~> 0.5)
   - Masonry (0.5.3)
+  - OCMock (3.1.1)
   - Specta (0.2.1)
 
 DEPENDENCIES:
@@ -14,6 +15,7 @@ DEPENDENCIES:
   - Expecta+Snapshots
   - FBSnapshotTestCase
   - loudspeaker (from `../`)
+  - OCMock (~> 3.1)
   - Specta (~> 0.2.1)
 
 EXTERNAL SOURCES:
@@ -26,6 +28,7 @@ SPEC CHECKSUMS:
   FBSnapshotTestCase: 9053afee1d66b4c7c313fcb0ae582a5e47bea9d0
   loudspeaker: 305c44dbedaaa7821c9ab1a82661482129bdb2d7
   Masonry: 35368c2ca9577ca87722c12fc52c4bad9b1c1516
+  OCMock: f6cb8c162ab9d5620dddf411282c7b2c0ee78854
   Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
 
 COCOAPODS: 0.33.1
