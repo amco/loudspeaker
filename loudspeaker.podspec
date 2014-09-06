@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
                        * Jump forward or backward with gestures
                        DESC
   s.homepage         = "https://github.com/amco/loudspeaker"
-  s.screenshots     = "i.imgur.com/fBfeGwP.png"
+  s.screenshot       = "http://i.imgur.com/IOACIpO.png"
   s.license          = 'MIT'
   s.author           = { "Adam Yanalunas" => "adamy@yanalunas.com" }
   s.source           = { :git => "https://github.com/amco/loudspeaker.git", :tag => s.version.to_s }
