@@ -1,9 +1,9 @@
 PODS:
   - Expecta (0.3.1)
-  - loudspeaker (0.1.1):
+  - loudspeaker (0.1.2):
     - Masonry (~> 0.5)
-  - Masonry (0.5.3)
-  - OCMock (3.1.1)
+  - Masonry (0.6.0)
+  - OCMock (3.1.2)
   - Specta (0.2.1)
 
 DEPENDENCIES:
@@ -18,9 +18,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Expecta: 03aabd0a89d8dea843baecb19a7fd7466a69a31d
-  loudspeaker: 1798b86beffc34deec590f9308f4d2aac0b6830d
-  Masonry: 35368c2ca9577ca87722c12fc52c4bad9b1c1516
-  OCMock: f6cb8c162ab9d5620dddf411282c7b2c0ee78854
+  loudspeaker: 71630472761d1d2eac936ae30d4a4e630cce6beb
+  Masonry: 0bc111d6902e3a55ff8423bcbdf7155261806547
+  OCMock: ecdd510b73ef397f2f97274785c1e87fd147c49f
   Specta: 9141310f46b1f68b676650ff2854e1ed0b74163a
 
 COCOAPODS: 0.35.0
