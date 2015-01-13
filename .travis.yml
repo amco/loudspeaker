@@ -2,6 +2,8 @@
 
 language: objective-c
 before_install:
+- brew update
+- brew outdated xctool || brew upgrade xctool
 - cd Example && pod install && cd -
 script:
 - xctool test -workspace Example/loudspeaker.xcworkspace -scheme Tests -sdk iphonesimulator

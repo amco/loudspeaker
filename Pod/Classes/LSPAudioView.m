@@ -70,33 +70,44 @@
 #pragma mark - Layout
 - (void)applyConstraints
 {
-    UIView *progressViewBar = self.progressView.progressBar;
-    UIView *progressViewBackground = self.progressView.progressBackground;
-    NSDictionary *viewBindings = NSDictionaryOfVariableBindings(_closeButton, _playbackTimeLabel, _playPauseButton, _progressView, progressViewBackground, progressViewBar, _titleLabel);
-    
     float horizontalPadding = 12.f;
     float verticalPadding = 12.f;
-    NSString *hProgressFormat = [NSString stringWithFormat:@"H:|[_playPauseButton(60)]-%f-[_progressView]-%f-[_closeButton(60)]|", horizontalPadding, horizontalPadding];
-    NSArray *horizontalRules = [NSLayoutConstraint constraintsWithVisualFormat:hProgressFormat options:0 metrics:nil views:viewBindings];
-    [self addConstraints:horizontalRules];
+    
+    [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(_playPauseButton.mas_right).offset(horizontalPadding);
+        make.right.greaterThanOrEqualTo(_closeButton.mas_left).offset(-horizontalPadding);
+        make.top.equalTo(_titleLabel.mas_bottom).offset(8);
+        make.height.equalTo(@9);
+    }];
     
     [self.progressView.progressBackground mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.progressView);
     }];
     
     [_playPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_top);
-        make.bottom.equalTo(self.mas_bottom);
+        make.left.equalTo(self.mas_left);
+        make.width.and.height.equalTo(@60);
+        make.centerY.equalTo(self.mas_centerY);
     }];
+    
     [_closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_top);
-        make.bottom.equalTo(self.mas_bottom);
+        make.centerY.equalTo(self.mas_centerY);
+        make.right.equalTo(self.mas_right);
+        make.width.and.height.equalTo(@60);
     }];
-
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[_titleLabel(16)]-8-[_progressView(9)]-15-|" , verticalPadding] options:0 metrics:nil views:viewBindings]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[_playPauseButton]-%f-[_titleLabel]", horizontalPadding] options:0 metrics:nil views:viewBindings]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[_titleLabel]-%f-[_playbackTimeLabel(100)]-%f-[_closeButton]", horizontalPadding, horizontalPadding] options:0 metrics:nil views:viewBindings]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-%f-[_playbackTimeLabel]", verticalPadding] options:0 metrics:nil views:viewBindings]];
+    
+    [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.equalTo(@16);
+        make.top.equalTo(self.mas_top).offset(verticalPadding);
+        make.right.greaterThanOrEqualTo(_playbackTimeLabel.mas_left).offset(horizontalPadding);
+        make.left.equalTo(_playPauseButton.mas_right).offset(horizontalPadding);
+    }];
+    
+    [_playbackTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.equalTo(@100);
+        make.right.greaterThanOrEqualTo(_closeButton.mas_left).offset(-horizontalPadding);
+        make.top.greaterThanOrEqualTo(self.mas_top).offset(verticalPadding);
+    }];
 }
 
 

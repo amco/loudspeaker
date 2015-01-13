@@ -1,1 +1,0 @@
-PODS_TESTS_LOUDSPEAKER_OTHER_LDFLAGS = -framework AVFoundation -framework UIKit
