@@ -23,9 +23,11 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 @property (nonatomic) BOOL playing;
 @property (nonatomic, strong) id progressObserver;
 
+- (void)addTimeObserver;
 - (void)closeButtonPressed:(UIButton *)button;
 - (void)handleTimelineTap:(UITapGestureRecognizer *)gesture;
 - (void)playedUntilEnd:(NSNotification *)notificaiton;
+- (void)removeTimeObserver;
 - (void)showProgress;
 - (void)togglePlayPause:(UIButton *)button;
 - (void)updateProgress;
@@ -87,7 +89,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 - (void)reset
 {
     [self stop];
-    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
+    [self removeTimeObserver];
     
     [self removeObserver:self forKeyPath:@"playing" context:&LSPAudioViewControllerContext];
     
@@ -108,7 +110,6 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     _playing = NO;
     _player = nil;
     _audioQueuePlayer = nil;
-    _progressObserver = nil;
 }
 
 
@@ -151,12 +152,9 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:willPlayPlayer:), [self.delegate audioViewController:self willPlayPlayer:self.player];)
     
-    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
+    [self removeTimeObserver];
     [self.player play];
-    __weak __typeof(self)weakself = self;
-    _progressObserver = [self.audioQueuePlayer addPeriodicTimeObserverForInterval:self.observationInterval queue:NULL usingBlock:^(CMTime time) {
-        [weakself showProgress];
-    }];
+    [self addTimeObserver];
     
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:didPlayPlayer:), [self.delegate audioViewController:self didPlayPlayer:self.player];)
 }
@@ -165,7 +163,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 - (void)pause
 {
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:willPausePlayer:), [self.delegate audioViewController:self willPausePlayer:self.player];)
-    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
+    [self removeTimeObserver];
     [self.player pause];
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:didPausePlayer:), [self.delegate audioViewController:self didPausePlayer:self.player];)
 }
@@ -275,6 +273,25 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 }
 
 
+#pragma mark - Helpers
+- (void)addTimeObserver
+{
+    __weak __typeof(self)weakself = self;
+    _progressObserver = [self.audioQueuePlayer addPeriodicTimeObserverForInterval:self.observationInterval queue:NULL usingBlock:^(CMTime time) {
+        [weakself showProgress];
+    }];
+}
+
+
+- (void)removeTimeObserver
+{
+    if (!_progressObserver) return;
+    
+    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
+    _progressObserver = nil;
+}
+
+
 #pragma mark - Gestures
 - (void)handleTimelineTap:(UITapGestureRecognizer *)gesture
 {
@@ -311,14 +328,9 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 
 - (void)setURL:(NSURL *)URL
 {
-    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
+    [self removeTimeObserver];
     _URL = URL;
-    
-    __weak __typeof(self) weakSelf = self;
-    _progressObserver = [self.audioQueuePlayer addPeriodicTimeObserverForInterval:weakSelf.observationInterval queue:NULL usingBlock:^(CMTime time) {
-        __strong __typeof(weakSelf) strongSelf = weakSelf;
-        [strongSelf showProgress];
-    }];
+    [self addTimeObserver];
 }
 
 
