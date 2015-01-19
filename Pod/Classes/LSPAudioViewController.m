@@ -151,7 +151,6 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:willPlayPlayer:), [self.delegate audioViewController:self willPlayPlayer:self.player];)
     
-    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
     [self.player play];
     __weak __typeof(self)weakself = self;
     _progressObserver = [self.audioQueuePlayer addPeriodicTimeObserverForInterval:self.observationInterval queue:NULL usingBlock:^(CMTime time) {
