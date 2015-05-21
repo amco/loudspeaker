@@ -14,7 +14,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   loudspeaker:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024

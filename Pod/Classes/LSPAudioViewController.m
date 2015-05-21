@@ -41,34 +41,16 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 @dynamic view;
 
 #pragma mark - Lifecycle
-- (instancetype)init
-{
-    self = [super init];
-    if (!self) return nil;
-    
-    [self setup];
-    
-    return self;
-}
-
-
-+ (instancetype)new
-{
-    LSPAudioViewController *audioVC = [self.class.alloc init];
-    if (!audioVC) return nil;
-    
-    return audioVC;
-}
-
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
 }
 
 
-- (void)setup
+- (void)viewDidLoad
 {
+    [super viewDidLoad];
+    
     self.view = [LSPAudioView newAutoLayoutView];
     [self.view.closeButton addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view.playPauseButton addTarget:self action:@selector(togglePlayPause:) forControlEvents:UIControlEventTouchUpInside];
