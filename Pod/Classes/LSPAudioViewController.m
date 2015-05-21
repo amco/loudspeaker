@@ -91,7 +91,11 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     [self stop];
     [self removeTimeObserver];
     
-    [self removeObserver:self forKeyPath:@"playing" context:&LSPAudioViewControllerContext];
+    @try
+    {
+        [self removeObserver:self forKeyPath:@"playing" context:&LSPAudioViewControllerContext];
+    }
+    @catch (NSException * __unused exception) {}
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
