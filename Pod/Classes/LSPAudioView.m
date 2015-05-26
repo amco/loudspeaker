@@ -76,7 +76,7 @@
     [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(_playPauseButton.mas_right).offset(horizontalPadding);
         make.right.greaterThanOrEqualTo(_closeButton.mas_left).offset(-horizontalPadding);
-        make.top.equalTo(_titleLabel.mas_bottom).offset(8);
+        make.top.equalTo(_titleLabel.mas_bottom).offset(6);
         make.height.equalTo(@9);
     }];
     
@@ -97,7 +97,7 @@
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.equalTo(@16);
+        make.height.equalTo(@20);
         make.top.equalTo(self.mas_top).offset(verticalPadding);
         make.right.greaterThanOrEqualTo(_playbackTimeLabel.mas_left).offset(horizontalPadding);
         make.left.equalTo(_playPauseButton.mas_right).offset(horizontalPadding);
