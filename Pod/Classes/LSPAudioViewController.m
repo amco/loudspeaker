@@ -41,28 +41,37 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 @dynamic view;
 
 #pragma mark - Lifecycle
-- (void)viewDidAppear:(BOOL)animated
+- (instancetype)init
 {
-    [super viewDidAppear:animated];
+    self = [super init];
+    if (!self) return nil;
+
+    [self setup];
+
+    return self;
+}
+
+
+- (void)setup
+{
+    self.player = LSPAudioPlayer.sharedInstance;
+    self.audioQueuePlayer = LSPAudioPlayer.player;
+
+    // Every .35 of a second.
+    self.observationInterval = CMTimeMake(1, 35);
+
+    [self addObserver:self forKeyPath:@"playing" options:0 context:&LSPAudioViewControllerContext];
 }
 
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     self.view = [LSPAudioView newAutoLayoutView];
     [self.view.closeButton addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.view.playPauseButton addTarget:self action:@selector(togglePlayPause:) forControlEvents:UIControlEventTouchUpInside];
-    
-    self.player = LSPAudioPlayer.sharedInstance;
-    self.audioQueuePlayer = LSPAudioPlayer.player;
-    
-    // Every .35 of a second.
-    self.observationInterval = CMTimeMake(1, 35);
-    
-    [self addObserver:self forKeyPath:@"playing" options:0 context:&LSPAudioViewControllerContext];
-    
+
     UITapGestureRecognizer *tapGesture = [UITapGestureRecognizer.alloc initWithTarget:self action:@selector(handleTimelineTap:)];
     [self.view.progressView addGestureRecognizer:tapGesture];
 }

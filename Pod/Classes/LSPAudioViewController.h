@@ -43,6 +43,7 @@
 - (void)play;
 - (void)playAudioWithURL:(NSURL *)url;
 - (void)reset;
+- (void)setup;
 - (void)stop;
 
 @end
