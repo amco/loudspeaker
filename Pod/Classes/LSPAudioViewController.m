@@ -59,8 +59,6 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 
     // Every .35 of a second.
     self.observationInterval = CMTimeMake(1, 35);
-
-    [self addObserver:self forKeyPath:@"playing" options:0 context:&LSPAudioViewControllerContext];
 }
 
 
@@ -74,6 +72,8 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 
     UITapGestureRecognizer *tapGesture = [UITapGestureRecognizer.alloc initWithTarget:self action:@selector(handleTimelineTap:)];
     [self.view.progressView addGestureRecognizer:tapGesture];
+
+    [self addObserver:self forKeyPath:@"playing" options:0 context:&LSPAudioViewControllerContext];
 }
 
 
