@@ -46,19 +46,12 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     self = [super init];
     if (!self) return nil;
 
-    [self setup];
+    // Every .35 of a second.
+    _observationInterval = CMTimeMake(1, 35);
+    _player = LSPAudioPlayer.sharedInstance;
+    _audioQueuePlayer = LSPAudioPlayer.player;
 
     return self;
-}
-
-
-- (void)setup
-{
-    self.player = LSPAudioPlayer.sharedInstance;
-    self.audioQueuePlayer = LSPAudioPlayer.player;
-
-    // Every .35 of a second.
-    self.observationInterval = CMTimeMake(1, 35);
 }
 
 
