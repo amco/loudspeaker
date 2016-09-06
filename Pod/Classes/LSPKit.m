@@ -12,38 +12,28 @@ NSString *const LSPAudioPlayerStart = @"loudspeaker.audio.start";
 NSString *const LSPAudioPlayerStop = @"loudspeaker.audio.stop";
 
 
+@interface LSPKit ()
+
++ (nullable NSBundle *)loudspeakerBundle;
+
+@end
+
+
 @implementation LSPKit
+
+
++ (NSBundle *)loudspeakerBundle
+{
+    return [NSBundle bundleWithURL:[[NSBundle bundleForClass:self.class] URLForResource:@"loudspeaker" withExtension:@"bundle"]];
+}
 
 
 + (UIImage *)imageNamed:(NSString *)name type:(NSString *)type
 {
-    CGFloat scale = [UIScreen mainScreen].scale;
-    static NSString *bundleName = @"loudspeaker.bundle";
-    NSString *resourceName = [NSString stringWithFormat:@"%@/%@", bundleName, name];
+    NSBundle *bundle = self.class.loudspeakerBundle;
+    NSString *imageFileName = [NSString stringWithFormat:@"%@.%@", name, type];
     
-    if (scale > 1)
-    {
-        NSString *scaleAmount = [NSString stringWithFormat:@"@%ix", (int)scale];
-        resourceName = [resourceName stringByAppendingString:scaleAmount];
-    }
-    
-    NSString *extension = type ?: @"png";
-    NSURL *url = [[NSBundle mainBundle] URLForResource:resourceName withExtension:extension];
-    
-    NSData *imageData = [NSData dataWithContentsOfURL:url];
-    UIImage *image;
-    if (imageData)
-    {
-        CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef) imageData);
-        CGImageRef imageRef = CGImageCreateWithPNGDataProvider(provider, NULL, YES, kCGRenderingIntentDefault);
-        
-        image = [UIImage imageWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
-        
-        CFRelease(imageRef);
-        CFRelease(provider);
-    }
-    
-    return image;
+    return [UIImage imageNamed:imageFileName inBundle:bundle compatibleWithTraitCollection:nil];
 }
 
 + (UIImage *)closeIcon

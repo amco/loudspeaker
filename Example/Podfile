@@ -1,11 +1,13 @@
-target 'loudspeaker', :exclusive => true do
-  pod "loudspeaker", :path => "../"
-end
+source 'https://github.com/CocoaPods/Specs.git'
 
-target 'Tests', :exclusive => true do
-  pod "loudspeaker", :path => "../"
+target 'loudspeaker' do
+  pod 'loudspeaker', :path => '../'
 
-  pod 'Specta', '~> 1.0'
-  pod 'Expecta', '~> 1.0'
-  pod 'OCMock', '~> 3.1'
+  target 'Tests' do
+    inherit! :search_paths
+
+    pod 'Specta', '~> 1.0'
+    pod 'Expecta', '~> 1.0'
+    pod 'OCMock', '~> 3.1'
+  end
 end
