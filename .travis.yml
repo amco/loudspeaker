@@ -1,11 +1,9 @@
 # reference: http://www.objc.io/issue-6/travis-ci.html
 
+osx_image: xcode7.3
 language: objective-c
-before_install:
-- gem install cocoapods -v 0.35.0
-- brew update
-- brew outdated xctool || brew upgrade xctool
-- rm Example/Podfile.lock
-- cd Example && pod install && cd -
+podfile: Example/Podfile
+cache:
+  - cocoapods
 script:
 - xctool test -workspace Example/loudspeaker.xcworkspace -scheme Tests -sdk iphonesimulator
