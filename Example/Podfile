@@ -1,11 +1,11 @@
-target 'loudspeaker', :exclusive => true do
-  pod "loudspeaker", :path => "../"
-end
-
-target 'Tests', :exclusive => true do
+target 'loudspeaker' do
   pod "loudspeaker", :path => "../"
 
-  pod 'Specta', '~> 0.2.1'
-  pod 'Expecta'
-  pod 'OCMock', '~> 3.1'
+  target 'Tests' do
+    inherit! :search_paths
+
+    pod 'Specta', '~> 0.2.1'
+    pod 'Expecta'
+    pod 'OCMock', '~> 3.1'
+  end
 end
