@@ -8,7 +8,7 @@
 
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CMTime.h>
-#import "LSPAudioPlayer.h"
+#import <loudspeaker/LSPAudioPlayer.h>
 #import <OCMock/OCMock.h>
 
 
