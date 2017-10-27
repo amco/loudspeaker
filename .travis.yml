@@ -4,4 +4,4 @@ podfile: Example/Podfile
 cache:
   - cocoapods
 script:
-- set -o pipefail && xcodebuild -workspace Example/loudspeaker.xcworkspace -scheme Tests -configuration Debug clean build test -sdk iphonesimulator -destination platform="iOS Simulator,OS=latest,name=iPhone 6" | xcpretty -c
+- set -o pipefail && xcodebuild -workspace Example/loudspeaker.xcworkspace -scheme Tests -configuration Debug clean build test -sdk iphonesimulator -destination platform="iOS Simulator,OS=latest,name=iPhone 6" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO | xcpretty -c
