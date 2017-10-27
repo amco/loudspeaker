@@ -1,28 +1,28 @@
 PODS:
-  - Expecta (1.0.5)
-  - loudspeaker (0.1.10):
+  - Expecta (1.0.6)
+  - loudspeaker (0.1.11):
     - Masonry (~> 0.5)
-  - Masonry (0.6.1)
-  - OCMock (3.3.1)
-  - Specta (1.0.5)
+  - Masonry (0.6.4)
+  - OCMock (3.4)
+  - Specta (1.0.7)
 
 DEPENDENCIES:
-  - Expecta (~> 1.0)
+  - Expecta
   - loudspeaker (from `../`)
-  - OCMock (~> 3.1)
-  - Specta (~> 1.0)
+  - OCMock
+  - Specta
 
 EXTERNAL SOURCES:
   loudspeaker:
-    :path: "../"
+    :path: ../
 
 SPEC CHECKSUMS:
-  Expecta: e1c022fcd33910b6be89c291d2775b3fe27a89fe
-  loudspeaker: aa10df1223a038c83da91b4edbe61ed581e1f71a
-  Masonry: 4972309f2f134de9dd312f4dc4a21359b50e6caa
-  OCMock: f3f61e6eaa16038c30caa5798c5e49d3307b6f22
-  Specta: ac94d110b865115fe60ff2c6d7281053c6f8e8a2
+  Expecta: 3b6bd90a64b9a1dcb0b70aa0e10a7f8f631667d5
+  loudspeaker: 33a267e6dc5da9c7cf98e65b6c4e17a3d39acc10
+  Masonry: 281802d04d787ea2973179ee8bcb50500579ede2
+  OCMock: 35ae71d6a8fcc1b59434d561d1520b9dd4f15765
+  Specta: 3e1bd89c3517421982dc4d1c992503e48bd5fe66
 
-PODFILE CHECKSUM: 2099fbb62d8cde2c893239f293cdd910f4886d20
+PODFILE CHECKSUM: f09561418a350e655ac9af3b4c31e8a50323005f
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.3.1
