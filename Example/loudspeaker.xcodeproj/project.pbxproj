@@ -329,7 +329,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-loudspeaker/Pods-loudspeaker-resources.sh",
-				$PODS_CONFIGURATION_BUILD_DIR/loudspeaker/loudspeaker.bundle,
+				"$PODS_CONFIGURATION_BUILD_DIR/loudspeaker/loudspeaker.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (

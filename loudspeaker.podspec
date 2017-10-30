@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'loudspeaker' => ['Pod/Assets/*.png']
   }
-  s.dependency 'Masonry', '~> 0.5'
+  s.dependency 'Masonry', '~> 1.1.0'
 
   s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'AVFoundation'
