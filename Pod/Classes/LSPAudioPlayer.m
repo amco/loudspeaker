@@ -10,39 +10,34 @@
 
 @interface LSPAudioPlayer ()
 
+@property (nonatomic) CMTime seekTolerance;
+@property (nonatomic) CMTime observationInterval;
+
 - (void)listenForEndOfAudio:(AVPlayerItem*)audio;
 
 @end
 
 @implementation LSPAudioPlayer
 
-static dispatch_once_t instanceToken = 0;
-static dispatch_once_t playerToken = 0;
-__strong static id _sharedObject = nil;
-__strong static AVQueuePlayer* _player;
 
-+ (LSPAudioPlayer*)sharedInstance
+- (instancetype)init
 {
-    dispatch_once(&instanceToken, ^{
-        _sharedObject = [self.class.alloc init];
-    });
-    return _sharedObject;
-}
-
-+ (AVQueuePlayer*)player
-{
-    dispatch_once(&playerToken, ^{
-        _player = AVQueuePlayer.new;
-    });
-    return _player;
+    self = [super init];
+    if (!self) return nil;
+    
+    _player = AVQueuePlayer.new;
+    _observationInterval = CMTimeMake(1, 35);
+    _seekTolerance = CMTimeMake(1, 100);
+    
+    return self;
 }
 
 
 #pragma mark - Playback
 - (void)playFromURLString:(NSString*)urlString
 {
-    NSString* tildeString = [urlString stringByExpandingTildeInPath];
-    NSURL* url = [NSURL fileURLWithPath:[tildeString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] isDirectory:NO];
+    NSString *tildeString = [urlString stringByExpandingTildeInPath];
+    NSURL *url = [NSURL fileURLWithPath:[tildeString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] isDirectory:NO];
     [self playFromURL:url];
 }
 
@@ -51,12 +46,12 @@ __strong static AVQueuePlayer* _player;
     if (![path.absoluteString isEqualToString:self.previousPath.absoluteString])
     {
         [self pause];
-        [self.class.player removeAllItems];
+        [self.player removeAllItems];
         
-        AVPlayerItem* audioItem = [AVPlayerItem playerItemWithURL:path];
+        AVPlayerItem *audioItem = [AVPlayerItem playerItemWithURL:path];
         
         [self listenForEndOfAudio:audioItem];
-        [self.class.player insertItem:audioItem afterItem:nil];
+        [self.player insertItem:audioItem afterItem:nil];
         
         self.previousPath = path;
     }
@@ -67,21 +62,34 @@ __strong static AVQueuePlayer* _player;
 
 - (void)play
 {
-    [self.class.player play];
+    [self.player play];
 }
 
 
 - (void)pause
 {
-    [self.class.player pause];
+    [self.player pause];
 }
 
 
 - (void)stop
 {
     [self pause];
-    [self.class.player removeAllItems];
+    [self.player removeAllItems];
     self.previousPath = nil;
+}
+
+
+- (void)setVolume:(float)volume
+{
+    self.player.volume = volume;
+}
+
+
+- (void)jumpToProgress:(Float64)progress
+{
+    CMTime time = [self timeFromProgress:progress];
+    [self.player seekToTime:time toleranceBefore:self.seekTolerance toleranceAfter:self.seekTolerance];
 }
 
 
@@ -98,28 +106,42 @@ __strong static AVQueuePlayer* _player;
 }
 
 
+- (id)addProgressObserver:(void (^)(CMTime time))observer
+{
+    return [self.player addPeriodicTimeObserverForInterval:self.observationInterval queue:NULL usingBlock:^(CMTime time) {
+        observer(time);
+    }];
+}
+
+
+- (void)removeProgressObserver:(id)observer
+{
+    [self.player removeTimeObserver:observer];
+}
+
+
 #pragma mark - Helpers
 - (CMTime)currentTime
 {
-    return self.class.player.currentItem.currentTime;
+    return self.player.currentItem.currentTime;
 }
 
 
 - (CMTime)duration
 {
-    return self.class.player.currentItem.duration;
+    return self.player.currentItem.duration;
 }
 
 
 - (AVPlayerStatus)status
 {
-    return self.class.player.status;
+    return self.player.status;
 }
 
 
 - (BOOL)isPlaying
 {
-    return (self.class.player && self.class.player.rate);
+    return (self.player && self.player.rate);
 }
 
 
@@ -141,7 +163,7 @@ __strong static AVQueuePlayer* _player;
 	if (self.previousPath)
     {
         [NSNotificationCenter.defaultCenter removeObserver:self];
-        [self.class.player removeAllItems];
+        [self.player removeAllItems];
         self.previousPath = nil;
     }
 }

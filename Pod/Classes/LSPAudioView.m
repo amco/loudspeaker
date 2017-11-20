@@ -80,10 +80,6 @@
         make.height.equalTo(@9);
     }];
     
-    [self.progressView.progressBackground mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.progressView);
-    }];
-    
     [_playPauseButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.mas_left);
         make.width.and.height.equalTo(@60);
@@ -121,10 +117,37 @@
 }
 
 
+#pragma mark - Playback information
 - (void)showLayoutForPlaying:(BOOL)isPlaying
 {
     UIImage *icon = (isPlaying ? LSPKit.pauseIcon : LSPKit.playIcon);
     [_playPauseButton setImage:icon forState:UIControlStateNormal];
+    [self setAccessibilityForPlayback:isPlaying];
+}
+
+
+- (void)setCurrentProgress:(NSString *)progress forDuration:(NSString *)duration
+{
+    NSString *labelText = [NSString stringWithFormat:@"%@ / %@", progress, duration];
+    
+    self.playbackTimeLabel.text = labelText;
+    self.playbackTimeLabel.accessibilityLabel = [NSString stringWithFormat:[LSPKit localizedString:@"loudspeaker.seconds_elapsed_format"], progress];
+}
+
+
+#pragma mark - Helpers
+- (void)setAccessibilityForPlayback:(BOOL)isPlaying
+{
+    if (isPlaying)
+    {
+        _playPauseButton.accessibilityLabel = [LSPKit localizedString:@"loudspeaker.pause"];
+        _playPauseButton.accessibilityHint = [LSPKit localizedString:@"loudspeaker.tap_to_pause_playback"];
+    }
+    else
+    {
+        _playPauseButton.accessibilityLabel = [LSPKit localizedString:@"loudspeaker.play"];
+        _playPauseButton.accessibilityHint = [LSPKit localizedString:@"loudspeaker.tap_to_resume_playback"];
+    }
 }
 
 
@@ -136,6 +159,9 @@
         _closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _closeButton.translatesAutoresizingMaskIntoConstraints = NO;
         [_closeButton setImage:LSPKit.closeIcon forState:UIControlStateNormal];
+        
+        _closeButton.isAccessibilityElement = YES;
+        _closeButton.accessibilityLabel = [LSPKit localizedString:@"loudspeaker.close"];
     }
     
     return _closeButton;
@@ -152,6 +178,9 @@
         _playbackTimeLabel.textColor = [UIColor colorWithWhite:102/255. alpha:1];
         _playbackTimeLabel.textAlignment = NSTextAlignmentRight;
         _playbackTimeLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        _playbackTimeLabel.isAccessibilityElement = YES;
+        _playbackTimeLabel.accessibilityTraits |= UIAccessibilityTraitUpdatesFrequently;
     }
     
     return _playbackTimeLabel;
@@ -165,6 +194,9 @@
         _playPauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _playPauseButton.translatesAutoresizingMaskIntoConstraints = NO;
         [_playPauseButton setImage:LSPKit.playIcon forState:UIControlStateNormal];
+        
+        _playPauseButton.isAccessibilityElement = YES;
+        [self setAccessibilityForPlayback:NO];
     }
     
     return _playPauseButton;
@@ -191,6 +223,8 @@
         _titleLabel.textAlignment = NSTextAlignmentLeft;
         _titleLabel.textColor = [UIColor colorWithWhite:102/255. alpha:1];
         _titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        _titleLabel.isAccessibilityElement = YES;
     }
     
     return _titleLabel;

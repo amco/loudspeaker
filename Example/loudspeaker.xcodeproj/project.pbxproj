@@ -25,6 +25,10 @@
 		6003F5BC195388D20070C39A /* LSPAudioPlayerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* LSPAudioPlayerSpec.m */; };
 		66275C8C19BA808800E74C05 /* Nyan-Cat-Test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 66275C8B19BA808800E74C05 /* Nyan-Cat-Test.mp3 */; };
 		6644D01519B1B06A006521EC /* Nyan-Cat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 6644D01419B1B06A006521EC /* Nyan-Cat.mp3 */; };
+		6649A3DF1FBF545F00C4A1DD /* LSPCMTimeHelperSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6649A3DE1FBF545F00C4A1DD /* LSPCMTimeHelperSpec.m */; };
+		6697C9DB1FC388CF003311FC /* LSPAudioViewSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6697C9DA1FC388CF003311FC /* LSPAudioViewSpec.m */; };
+		6697C9DD1FC38DF1003311FC /* LSPProgressViewSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6697C9DC1FC38DF1003311FC /* LSPProgressViewSpec.m */; };
+		6697C9DF1FC395F4003311FC /* LSPConfigurationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 6697C9DE1FC395F4003311FC /* LSPConfigurationSpec.m */; };
 		66A27D3D1FBE678B00BAA835 /* Launch.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 66A27D3C1FBE678B00BAA835 /* Launch.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -39,7 +43,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		04CE74406D184CFBBBA1F083 /* loudspeaker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = loudspeaker.podspec; path = ../loudspeaker.podspec; sourceTree = "<group>"; };
+		04CE74406D184CFBBBA1F083 /* loudspeaker.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = loudspeaker.podspec; path = ../loudspeaker.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		120B8E2BB30D71BE484C407B /* Pods-loudspeaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-loudspeaker.release.xcconfig"; path = "Pods/Target Support Files/Pods-loudspeaker/Pods-loudspeaker.release.xcconfig"; sourceTree = "<group>"; };
 		277C080A6A344991E9CCDE66 /* Pods-loudspeaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-loudspeaker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-loudspeaker/Pods-loudspeaker.debug.xcconfig"; sourceTree = "<group>"; };
 		5A1340D735A19B0195BF9D95 /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +69,10 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		66275C8B19BA808800E74C05 /* Nyan-Cat-Test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Nyan-Cat-Test.mp3"; sourceTree = "<group>"; };
 		6644D01419B1B06A006521EC /* Nyan-Cat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "Nyan-Cat.mp3"; sourceTree = "<group>"; };
+		6649A3DE1FBF545F00C4A1DD /* LSPCMTimeHelperSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPCMTimeHelperSpec.m; sourceTree = "<group>"; };
+		6697C9DA1FC388CF003311FC /* LSPAudioViewSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPAudioViewSpec.m; sourceTree = "<group>"; };
+		6697C9DC1FC38DF1003311FC /* LSPProgressViewSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPProgressViewSpec.m; sourceTree = "<group>"; };
+		6697C9DE1FC395F4003311FC /* LSPConfigurationSpec.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LSPConfigurationSpec.m; sourceTree = "<group>"; };
 		66A27D3C1FBE678B00BAA835 /* Launch.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Launch.storyboard; sourceTree = "<group>"; };
 		A96B09DA14504E865B964CDD /* Pods_loudspeaker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_loudspeaker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF755EAFAF0B404E8A8F022C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -164,6 +172,10 @@
 			isa = PBXGroup;
 			children = (
 				6003F5BB195388D20070C39A /* LSPAudioPlayerSpec.m */,
+				6697C9DA1FC388CF003311FC /* LSPAudioViewSpec.m */,
+				6649A3DE1FBF545F00C4A1DD /* LSPCMTimeHelperSpec.m */,
+				6697C9DE1FC395F4003311FC /* LSPConfigurationSpec.m */,
+				6697C9DC1FC38DF1003311FC /* LSPProgressViewSpec.m */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 			);
 			path = Tests;
@@ -436,6 +448,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5BC195388D20070C39A /* LSPAudioPlayerSpec.m in Sources */,
+				6697C9DF1FC395F4003311FC /* LSPConfigurationSpec.m in Sources */,
+				6697C9DB1FC388CF003311FC /* LSPAudioViewSpec.m in Sources */,
+				6697C9DD1FC38DF1003311FC /* LSPProgressViewSpec.m in Sources */,
+				6649A3DF1FBF545F00C4A1DD /* LSPCMTimeHelperSpec.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "loudspeaker"
-  s.version          = "0.2.0"
+  s.version          = "1.0.0"
   s.summary          = "An AVQueuePlayer-backed audio player with a modern, minimal UI"
   s.description      = <<-DESC
                        An audio player with a modern, minimal UI. Powered by AVQueuePlayer.
@@ -16,12 +16,12 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/amco/loudspeaker.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/adamyanalunas'
 
-  s.platform     = :ios, '8.0'
+  s.platform     = :ios, '9.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes'
   s.resource_bundles = {
-    'loudspeaker' => ['Pod/Assets/*.png']
+    'loudspeaker' => ['Pod/Assets/**/*']
   }
   s.dependency 'Masonry', '~> 1.1.0'
 
