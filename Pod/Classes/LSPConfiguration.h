@@ -18,12 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LSPConfigurationBuilder : NSObject
 
 /**
- Height of the player UI. Currently this is the only configurable layout size.
- Defaults to 60
- */
-@property (nonatomic) CGFloat height;
-
-/**
  How often the progress UI updates. Uses `CMTime` which has a format of interval/base.
  Defaults to 1/35th of a second, i.e. `CMTimeMake(1, 35)`.
  */
@@ -53,7 +47,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LSPConfiguration : NSObject
 
-@property (nonatomic, readonly) CGFloat height;
 @property (nonatomic, readonly) CMTime observationInterval;
 @property (nonatomic, readonly) CMTime seekTolerance;
 @property (nonatomic, readonly) CGFloat volume;

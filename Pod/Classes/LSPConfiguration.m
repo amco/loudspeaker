@@ -13,7 +13,6 @@
 + (LSPConfigurationBuilder *)defaultConfiguration
 {
     LSPConfigurationBuilder *config = LSPConfigurationBuilder.new;
-    config.height = 60;
     config.seekTolerance = CMTimeMake(1, 100);
     config.observationInterval = CMTimeMake(1, 35);
     config.volume = 1;
@@ -46,7 +45,6 @@
     self = [super init];
     if (!self) return nil;
     
-    _height = builder.height;
     _seekTolerance = builder.seekTolerance;
     _observationInterval = builder.observationInterval;
     _volume = builder.volume;

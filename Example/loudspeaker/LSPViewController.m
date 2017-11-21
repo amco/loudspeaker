@@ -38,7 +38,7 @@
 }
 
 
-- (void)closeDemo
+- (void)resetDemoButtons
 {
     self.demoButton.enabled = YES;
     self.harlequinButton.enabled = YES;
@@ -56,10 +56,11 @@
     if (sender == self.harlequinButton)
     {
         self.configuration = [LSPConfigurationBuilder configurationWithBuilder:^(LSPConfigurationBuilder *builder) {
-            builder.height = 120;
             builder.volume = 0.1;
         }];
         self.audioVC = [LSPAudioViewController.alloc initWithConfiguration:self.configuration];
+        CGFloat playerHeight = 120;
+        self.audioVC.view.frame = CGRectMake(0, CGRectGetHeight(self.view.frame) - playerHeight, CGRectGetWidth(self.view.frame), playerHeight);
         
         self.audioVC.playerView.progressView.foregroundColor = UIColor.redColor;
         self.audioVC.playerView.progressView.backgroundColor = UIColor.blueColor;
@@ -71,7 +72,9 @@
     {
         self.configuration = LSPConfigurationBuilder.defaultConfiguration;
         self.audioVC = [LSPAudioViewController.alloc initWithConfiguration:self.configuration];
-        
+        CGFloat playerHeight = 60;
+        self.audioVC.view.frame = CGRectMake(0, CGRectGetHeight(self.view.frame) - playerHeight, CGRectGetWidth(self.view.frame), playerHeight);
+
         self.audioVC.playerView.progressView.foregroundColor = [UIColor colorWithRed:88/255. green:199/255. blue:226/255. alpha:1];
         self.audioVC.playerView.progressView.backgroundColor = [UIColor colorWithWhite:207/255. alpha:1];
         self.audioVC.playerView.backgroundColor = [UIColor colorWithWhite:238/255. alpha:1];
@@ -103,7 +106,7 @@
 
 - (void)audioViewController:(LSPAudioViewController *)viewController didClosePlayer:(LSPAudioPlayer *)player
 {
-    [self closeDemo];
+    [self resetDemoButtons];
 }
 
 

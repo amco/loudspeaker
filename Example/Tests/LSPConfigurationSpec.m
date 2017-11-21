@@ -21,7 +21,6 @@ describe(@"defaultConfiguration", ^{
     });
     
     it(@"contains the default configuration values", ^{
-        expect(config.height).to.equal(60);
         expect(config.seekTolerance.value).to.equal(1);
         expect(config.seekTolerance.timescale).to.equal(100);
         expect(config.observationInterval.value).to.equal(1);
@@ -35,7 +34,6 @@ describe(@"configurationWithBuilder:", ^{
     
     beforeEach(^{
         config = [LSPConfigurationBuilder configurationWithBuilder:^(LSPConfigurationBuilder *builder) {
-            builder.height = 123;
             builder.seekTolerance = CMTimeMake(1, 2);
             builder.observationInterval = CMTimeMake(3, 4);
             builder.volume = .2;
@@ -43,7 +41,6 @@ describe(@"configurationWithBuilder:", ^{
     });
     
     it(@"uses the given values to build a configuration", ^{
-        expect(config.height).to.equal(123);
         expect(config.seekTolerance.value).to.equal(1);
         expect(config.seekTolerance.timescale).to.equal(2);
         expect(config.observationInterval.value).to.equal(3);

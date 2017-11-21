@@ -129,7 +129,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.and.right.equalTo(self.view);
-        make.height.mas_equalTo(self.configuration.height);
+        make.height.equalTo(self.view);
         make.bottom.equalTo(self.bottomLayout);
     }];
     [self.view layoutIfNeeded];
@@ -148,38 +148,30 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     NSTimeInterval delay = 0;
     UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut);
     
-    __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:duration delay:delay options:options animations:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        [strongSelf.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.bottomLayout).with.offset(0);
         }];
-        [strongSelf.view layoutIfNeeded];
+        [self.view layoutIfNeeded];
     } completion:nil];
 }
 
 
-- (void)hide:(nullable void (^)(void))completion
+- (void)hide:(void (^)(void))completion
 {
-    __weak typeof(self) weakSelf = self;
-    [weakSelf.view layoutIfNeeded];
+    [self.view layoutIfNeeded];
     
     NSTimeInterval duration = .666f;
     NSTimeInterval delay = 0;
     UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut);
     
+    CGFloat offset = [self bottomOffset];
     [UIView animateWithDuration:duration delay:delay options:options animations:^{
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
-        CGFloat offset = [strongSelf bottomOffset];
-        [strongSelf.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
+        [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.bottomLayout).with.offset(offset);
         }];
-        [strongSelf.view layoutIfNeeded];
+        [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
-        __strong typeof(weakSelf) strongSelf = weakSelf;
-        
         if (completion)
         {
             dispatch_async(dispatch_get_main_queue(), ^{

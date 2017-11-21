@@ -1,6 +1,6 @@
 //
 //  LSPAudioPlayerModel.h
-//  Expecta
+//  loudspeaker
 //
 //  Created by Adam Yanalunas on 11/16/17.
 //

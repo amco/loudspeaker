@@ -122,37 +122,3 @@ describe(@"progressBar", ^{
 
 
 SpecEnd
-
-//@interface LSPProgressViewSpecHelper : NSObject
-//
-//- (void)assertSetup;
-//
-//@end
-//
-//@implementation LSPProgressViewSpecHelper
-//
-//- (void)assertSetup
-//{
-//    __block LSPProgressView *view;
-//    __block OCMockObject *viewMock;
-//
-//    beforeEach(^{
-//        view = [LSPProgressView.alloc initForAutoLayout];
-//        viewMock = OCMPartialMock(view);
-//    });
-//
-//    afterEach(^{
-//        [viewMock stopMocking];
-//    });
-//
-//    it(@"sets view to disable autoresize mask", ^{
-//        expect(view.translatesAutoresizingMaskIntoConstraints).to.beFalsy();
-//    });
-//
-//    it(@"sets up the view", ^{
-//
-//    });
-//}
-//
-//@end
-
