@@ -11,23 +11,25 @@
 
 + (NSString *)readableCMTime:(CMTime)time
 {
-    NSUInteger totalSeconds = CMTimeGetSeconds(time);
-    NSUInteger hours = floor(totalSeconds / 3600);
-    NSUInteger minutes = floor(totalSeconds % 3600 / 60);
-    NSUInteger seconds = floor(totalSeconds % 3600 % 60);
+    NSInteger totalSeconds = CMTimeGetSeconds(time);
+    if (totalSeconds < 0) totalSeconds = 0;
+    
+    NSInteger minutes = floor(totalSeconds % 3600 / 60);
+    NSInteger seconds = floor(totalSeconds % 60);
     
     NSString *formattedTime;
-    if (hours > 0)
+    if (totalSeconds > 3600)
     {
-        formattedTime = [NSString stringWithFormat:@"%lu:%02lu:%02lu", (unsigned long)hours, (unsigned long)minutes, (unsigned long)seconds];
+        NSInteger hours = floor(totalSeconds / 3600);
+        formattedTime = [NSString stringWithFormat:@"%i:%02i:%02i", hours, minutes, seconds];
     }
-    else if (minutes > 0)
+    else if (totalSeconds > 60)
     {
-        formattedTime = [NSString stringWithFormat:@"%02lu:%02lu", (unsigned long)minutes, (unsigned long)seconds];
+        formattedTime = [NSString stringWithFormat:@"%02i:%02i", minutes, seconds];
     }
     else
     {
-        formattedTime = [NSString stringWithFormat:@"0:%02lu", (unsigned long)seconds];
+        formattedTime = [NSString stringWithFormat:@"00:%02i", seconds];
     }
     
     return formattedTime;

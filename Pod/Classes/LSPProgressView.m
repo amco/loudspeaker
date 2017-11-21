@@ -6,6 +6,7 @@
 //
 
 #import "LSPProgressView.h"
+#import <Masonry/Masonry.h>
 
 
 @interface LSPProgressView ()
@@ -62,6 +63,10 @@
     
     [self addSubview:self.progressBackground];
     [self addSubview:self.progressBar];
+    
+    [self.progressBackground mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self);
+    }];
 }
 
 
@@ -71,6 +76,8 @@
     CGRect updatedFrame = self.progressBackground.frame;
     updatedFrame.size.width = MIN(CGRectGetWidth(self.progressBackground.frame), CGRectGetWidth(updatedFrame) * amount);
     self.progressBar.frame = updatedFrame;
+    
+    self.progressBar.accessibilityLabel = [NSString stringWithFormat:@"%i%%", (NSInteger) round(updatedFrame.size.width / CGRectGetWidth(self.progressBackground.frame) * 100)];
 }
 
 
@@ -107,6 +114,9 @@
     {
         _progressBar = UIView.new;
         _progressBar.translatesAutoresizingMaskIntoConstraints = NO;
+        
+        _progressBar.isAccessibilityElement = YES;
+        _progressBar.accessibilityTraits |= UIAccessibilityTraitUpdatesFrequently;
     }
     
     return _progressBar;

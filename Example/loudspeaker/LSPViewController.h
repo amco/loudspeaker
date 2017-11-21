@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *demoButton;
 @property (weak, nonatomic) IBOutlet UIButton *harlequinButton;
 
+- (void)resetDemoButtons;
 - (IBAction)launchDemo:(id)sender;
 - (IBAction)launchHarlequinDemo:(id)sender;
 

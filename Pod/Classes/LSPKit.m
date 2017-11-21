@@ -59,4 +59,10 @@ NSString *const LSPAudioPlayerStop = @"loudspeaker.audio.stop";
     return [self.class imageNamed:@"audio_play_icon" type:@"png"];
 }
 
+
++ (NSString *)localizedString:(NSString *)string
+{
+    return [self.class.loudspeakerBundle localizedStringForKey:string value:nil table:nil];
+}
+
 @end

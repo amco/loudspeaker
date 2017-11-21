@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  Pods
+
+  Created by Adam Yanalunas on 11/19/17.
+  
+*/
+
+"loudspeaker.close" = "Close";
+"loudspeaker.pause" = "Pause";
+"loudspeaker.play" = "Play";
+"loudspeaker.seconds_elapsed_format" = "%@ seconds elapsed";
+"loudspeaker.tap_to_pause_playback" = "Tap to pause playback";
+"loudspeaker.tap_to_resume_playback" = "Tap to resume playback";

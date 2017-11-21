@@ -9,8 +9,10 @@
 #import "LSPAudioView.h"
 #import "LSPAudioViewController.h"
 #import "LSPCMTimeHelper.h"
+#import "LSPConfiguration.h"
 #import "LSPKit.h"
 #import "LSPProgressView.h"
+#import <Masonry/Masonry.h>
 
 
 static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
@@ -18,15 +20,20 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 
 @interface LSPAudioViewController ()
 
-@property (nonatomic, weak) LSPAudioPlayer *player;
-@property (nonatomic, weak) AVQueuePlayer *audioQueuePlayer;
+@property (nonatomic) LSPAudioPlayer *player;
+@property (nonatomic) MASConstraint *bottomConstraint;
+@property (nonatomic) LSPConfiguration *configuration;
+@property (nonatomic) LSPAudioView *playerView;
 @property (nonatomic) BOOL playing;
-@property (nonatomic, strong) id progressObserver;
+@property (nonatomic) id progressObserver;
 
 - (void)addTimeObserver;
+- (MASViewAttribute *)bottomLayout;
+- (CGFloat)bottomOffset;
 - (void)closeButtonPressed:(UIButton *)button;
 - (void)handleTimelineTap:(UITapGestureRecognizer *)gesture;
 - (void)playedUntilEnd:(NSNotification *)notificaiton;
+- (Float64)progressFromGesture:(UIGestureRecognizer *)gesture;
 - (void)removeTimeObserver;
 - (void)showProgress;
 - (void)togglePlayPause:(UIButton *)button;
@@ -41,15 +48,16 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 @dynamic view;
 
 #pragma mark - Lifecycle
-- (instancetype)init
+- (instancetype)initWithConfiguration:(LSPConfiguration *)configuration
 {
     self = [super init];
     if (!self) return nil;
 
-    // Every .35 of a second.
-    _observationInterval = CMTimeMake(1, 35);
-    _player = LSPAudioPlayer.sharedInstance;
-    _audioQueuePlayer = LSPAudioPlayer.player;
+    _configuration = configuration;
+    _model = LSPAudioPlayerModel.new;
+    _player = LSPAudioPlayer.new;
+    _playerView = [LSPAudioView newAutoLayoutView];
+    [_player setVolume:_configuration.volume];
 
     return self;
 }
@@ -59,12 +67,17 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     [super viewDidLoad];
 
-    self.view = [LSPAudioView newAutoLayoutView];
-    [self.view.closeButton addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view.playPauseButton addTarget:self action:@selector(togglePlayPause:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.playerView];
+    [self assignConstraintsToView];
+    
+    [self.playerView.closeButton addTarget:self action:@selector(closeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.playerView.playPauseButton addTarget:self action:@selector(togglePlayPause:) forControlEvents:UIControlEventTouchUpInside];
 
     UITapGestureRecognizer *tapGesture = [UITapGestureRecognizer.alloc initWithTarget:self action:@selector(handleTimelineTap:)];
-    [self.view.progressView addGestureRecognizer:tapGesture];
+    [self.playerView.progressView addGestureRecognizer:tapGesture];
+    
+    UIPanGestureRecognizer *panGesture = [UIPanGestureRecognizer.alloc initWithTarget:self action:@selector(handleTimelinePan:)];
+    [self.playerView.progressView addGestureRecognizer:panGesture];
 
     [self addObserver:self forKeyPath:@"playing" options:0 context:&LSPAudioViewControllerContext];
 }
@@ -87,17 +100,14 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     {
         [self.view removeFromSuperview];
     }
-    
+
     if (self.parentViewController)
     {
         [self removeFromParentViewController];
     }
     
     _delegate = nil;
-    _URL = nil;
     _playing = NO;
-    _player = nil;
-    _audioQueuePlayer = nil;
 }
 
 
@@ -108,24 +118,67 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     {
         if ([keyPath isEqualToString:NSStringFromSelector(@selector(playing))])
         {
-            [self.view showLayoutForPlaying:self.player.isPlaying];
+            [self.playerView showLayoutForPlaying:self.player.isPlaying];
         }
     }
 }
 
 
 #pragma mark - Layout
-- (void)assignConstraintsToView:(UIView *)parentView
+- (void)assignConstraintsToView
 {
-    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1 constant:60];
-    [self.view addConstraint:heightConstraint];
+    [self.playerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.and.right.equalTo(self.view);
+        make.height.equalTo(self.view);
+        make.bottom.equalTo(self.bottomLayout);
+    }];
+    [self.view layoutIfNeeded];
+}
+
+
+- (void)show
+{
+    CGFloat offset = [self bottomOffset];
+    [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self.bottomLayout).with.offset(offset);
+    }];
+    [self.view layoutIfNeeded];
     
-    self.bottomConstraint = [NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:parentView attribute:NSLayoutAttributeBottom multiplier:1 constant:0];
-    [parentView addConstraint:self.bottomConstraint];
+    NSTimeInterval duration = .666f;
+    NSTimeInterval delay = 0;
+    UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut);
     
-    UIView *view = self.view;
-    NSDictionary *viewBindings = NSDictionaryOfVariableBindings(view);
-    [parentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|" options:0 metrics:nil views:viewBindings]];
+    [UIView animateWithDuration:duration delay:delay options:options animations:^{
+        [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.bottomLayout).with.offset(0);
+        }];
+        [self.view layoutIfNeeded];
+    } completion:nil];
+}
+
+
+- (void)hide:(void (^)(void))completion
+{
+    [self.view layoutIfNeeded];
+    
+    NSTimeInterval duration = .666f;
+    NSTimeInterval delay = 0;
+    UIViewAnimationOptions options = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseInOut);
+    
+    CGFloat offset = [self bottomOffset];
+    [UIView animateWithDuration:duration delay:delay options:options animations:^{
+        [self.playerView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.bottomLayout).with.offset(offset);
+        }];
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        if (completion)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion();
+            });
+        }
+    }];
 }
 
 
@@ -161,7 +214,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:willStopPlayer:), [self.delegate audioViewController:self willStopPlayer:self.player];)
     [[NSNotificationCenter defaultCenter] postNotificationName:LSPAudioPlayerStop object:self];
-    [LSPAudioPlayer.sharedInstance stop];
+    [self.player stop];
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:didStopPlayer:), [self.delegate audioViewController:self didStopPlayer:self.player];)
 }
 
@@ -169,8 +222,8 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 - (void)playedUntilEnd:(NSNotification *)notificaiton
 {
     self.playing = NO;
-    [self.view showLayoutForPlaying:NO];
-    [self.view.progressView setProgress:0];
+    [self.playerView showLayoutForPlaying:NO];
+    [self.playerView.progressView setProgress:0];
     [self close];
 }
 
@@ -181,18 +234,20 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     NSDictionary *userInfo = @{ @"url": url };
     [[NSNotificationCenter defaultCenter] postNotificationName:LSPAudioPlayerStart object:self userInfo:userInfo];
-    [LSPAudioPlayer.sharedInstance playFromURL:url];
+    [self.player playFromURL:url];
     [self playAudioSetupWithURL:url];
 }
 
 - (void)playAudioSetupWithURL:(NSURL *)url
 {
-    self.URL = url;
-    self.title = url.lastPathComponent;
+    [self removeTimeObserver];
+    [self.model setDestination:url];
+    [self addTimeObserver];
+    self.playerView.titleLabel.text = self.model.title;
     
     self.playing = self.player.isPlaying;
     
-    [self.view.progressView setProgress:0];
+    [self.playerView.progressView setProgress:0];
     [self showProgress];
     
     NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
@@ -204,7 +259,10 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     DELEGATE_SAFELY(self.delegate, @selector(audioViewController:willClosePlayer:), [self.delegate audioViewController:self willClosePlayer:self.player];)
     [self.player stop];
-    DELEGATE_SAFELY(self.delegate, @selector(audioViewController:didClosePlayer:), [self.delegate audioViewController:self didClosePlayer:self.player];)
+    [self hide:^{
+        DELEGATE_SAFELY(self.delegate, @selector(audioViewController:didClosePlayer:), [self.delegate audioViewController:self didClosePlayer:self.player];)
+        [self reset];
+    }];
 }
 
 
@@ -216,7 +274,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 
 - (void)togglePlayPause:(UIButton *)button
 {
-    if (self.isPlaying)
+    if (self.player.isPlaying)
     {
         [self pause];
     }
@@ -232,6 +290,8 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 #pragma mark - Progress
 - (void)showProgress
 {
+    if (self.player.status != AVPlayerStatusReadyToPlay) return;
+    
     [self updateProgress];
     [self updateTimeLabel];
 }
@@ -239,15 +299,13 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 
 - (void)updateProgress
 {
-    if (self.player.status != AVPlayerStatusReadyToPlay) return;
-    
     Float64 duration = CMTimeGetSeconds(self.player.duration);
     Float64 current = CMTimeGetSeconds(self.player.currentTime);
     
     if (!isnormal(duration)) return;
     
     Float64 progress = (current / duration);
-    [self.view.progressView setProgress:progress];
+    [self.playerView.progressView setProgress:progress];
 }
 
 
@@ -255,9 +313,14 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     NSString *duration = [LSPCMTimeHelper readableCMTime:self.player.duration];
     NSString *current = [LSPCMTimeHelper readableCMTime:self.player.currentTime];
-    NSString *labelText = [NSString stringWithFormat:@"%@ / %@", current, duration];
-    
-    self.view.playbackTimeLabel.text = labelText;
+    [self.playerView setCurrentProgress:current forDuration:duration];
+}
+
+
+- (void)jumpToProgress:(Float64)progress
+{
+    [self.player jumpToProgress:progress];
+    [self showProgress];
 }
 
 
@@ -265,7 +328,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 - (void)addTimeObserver
 {
     __weak __typeof(self)weakself = self;
-    _progressObserver = [self.audioQueuePlayer addPeriodicTimeObserverForInterval:self.observationInterval queue:NULL usingBlock:^(CMTime time) {
+    [self.player addProgressObserver:^(CMTime time) {
         [weakself showProgress];
     }];
 }
@@ -275,62 +338,69 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 {
     if (!_progressObserver) return;
     
-    [self.audioQueuePlayer removeTimeObserver:_progressObserver];
+    [self.player removeProgressObserver:_progressObserver];
     _progressObserver = nil;
 }
 
 
-#pragma mark - Gestures
-- (void)handleTimelineTap:(UITapGestureRecognizer *)gesture
-{
-    BOOL validTap = (gesture.state == UIGestureRecognizerStateEnded && self.view.progressView.hidden == NO);
-    if (validTap)
-    {
-        CGPoint location = [gesture locationOfTouch:0 inView:self.view.progressView];
-        float xPos = location.x;
-        Float64 jumpPoint = xPos/CGRectGetWidth(self.view.progressView.frame);
-        CMTime jumpTime = [self.player timeFromProgress:jumpPoint];
-        [self.audioQueuePlayer seekToTime:jumpTime toleranceBefore:self.seekTolerance toleranceAfter:self.seekTolerance];
-        [self updateProgress];
-    }
-}
-
-
-#pragma mark - Properties
 - (BOOL)isPlaying
 {
     return self.player.isPlaying;
 }
 
 
-- (CMTime)seekTolerance
+- (CGFloat)bottomOffset
 {
-    if (CMTimeCompare(_seekTolerance, kCMTimeInvalid) == 0)
+    CGFloat safeAreaInset = 0;
+    if (@available(iOS 11, *))
     {
-        _seekTolerance = CMTimeMake(1, 100);
+        safeAreaInset = self.view.safeAreaInsets.bottom;
+    }
+    return safeAreaInset + CGRectGetHeight(self.playerView.frame);
+}
+
+
+- (MASViewAttribute *)bottomLayout
+{
+    MASViewAttribute *bottom = self.view.mas_bottom;
+    if (@available(iOS 11, *))
+    {
+        bottom = self.view.mas_safeAreaLayoutGuideBottom;
     }
     
-    return _seekTolerance;
+    return bottom;
 }
 
 
-- (void)setURL:(NSURL *)URL
+#pragma mark - Gestures
+- (void)handleTimelineTap:(UITapGestureRecognizer *)gesture
 {
-    [self removeTimeObserver];
-    _URL = URL;
-    [self addTimeObserver];
+    BOOL validTap = (gesture.state == UIGestureRecognizerStateEnded && self.playerView.progressView.hidden == NO);
+    if (validTap)
+    {
+        Float64 progress = [self progressFromGesture:gesture];
+        [self jumpToProgress:progress];
+    }
 }
 
 
-- (NSString *)title
+// TODO: Pause while scrubbing, play when gesture is done
+- (void)handleTimelinePan:(UIPanGestureRecognizer *)gesture
 {
-    return self.view.titleLabel.text;
+    BOOL validPan = (gesture.state == UIGestureRecognizerStateChanged && self.playerView.progressView.hidden == NO);
+    if (validPan)
+    {
+        Float64 progress = [self progressFromGesture:gesture];
+        [self jumpToProgress:progress];
+    }
 }
 
 
-- (void)setTitle:(NSString *)title
+- (Float64)progressFromGesture:(UIGestureRecognizer *)gesture
 {
-    self.view.titleLabel.text = title;
+    CGPoint location = [gesture locationOfTouch:0 inView:self.playerView.progressView];
+    CGFloat xPos = location.x;
+    return (Float64)xPos/CGRectGetWidth(self.playerView.progressView.frame);
 }
 
 

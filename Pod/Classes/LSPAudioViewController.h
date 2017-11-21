@@ -5,10 +5,14 @@
 //  Copyright (c) 2014 Amco International Education Services, LLC. All rights reserved.
 //
 
-#import <CoreMedia/CMTime.h>
 #import "LSPAudioView.h"
+#import "LSPAudioPlayerModel.h"
 
-@class LSPAudioPlayer, LSPAudioViewController;
+
+NS_ASSUME_NONNULL_BEGIN
+
+
+@class LSPAudioPlayer, LSPAudioViewController, LSPConfiguration;
 
 @protocol LSPAudioViewControllerDelegate <NSObject>
 
@@ -28,21 +32,27 @@
 
 @interface LSPAudioViewController : UIViewController
 
-@property (nonatomic, strong) NSLayoutConstraint *bottomConstraint;
+@property (nonatomic, readonly) LSPConfiguration *configuration;
 @property (nonatomic, weak) id<LSPAudioViewControllerDelegate> delegate;
-@property (nonatomic) CMTime observationInterval;
-@property (nonatomic) CMTime seekTolerance;
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, strong) NSURL *URL;
-@property (nonatomic, strong) LSPAudioView *view;
+@property (nonatomic) LSPAudioPlayerModel *model;
+@property (nonatomic, readonly) LSPAudioView *playerView;
 
-- (void)assignConstraintsToView:(UIView *)view;
++ (instancetype)new NS_UNAVAILABLE;
+- (instancetype)init NS_UNAVAILABLE;
+- (instancetype)initWithConfiguration:(LSPConfiguration *)configuration NS_DESIGNATED_INITIALIZER;
+
 - (void)close;
+- (void)hide:(nullable void (^)(void))completion;
 - (BOOL)isPlaying;
+- (void)jumpToProgress:(Float64)progress;
 - (void)pause;
 - (void)play;
 - (void)playAudioWithURL:(NSURL *)url;
 - (void)reset;
+- (void)show;
 - (void)stop;
 
 @end
+
+
+NS_ASSUME_NONNULL_END

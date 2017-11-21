@@ -13,7 +13,7 @@
 
 
 #define SETUP_AND_RESET_PLAYER \
-__block LSPAudioPlayer* player = LSPAudioPlayer.sharedInstance;\
+__block LSPAudioPlayer* player = LSPAudioPlayer.new;\
 \
 afterEach(^{\
 [player resetPlayer];\
@@ -35,20 +35,8 @@ context(@"LSPAudioPlayer", ^{
         audioFile2 = [[NSBundle bundleForClass:self.class] URLForResource:@"Nyan-Cat-Test" withExtension:@"mp3"];
     });
     
-    describe(@"sharedInstance", ^{
-        it(@"Returns the same instance", ^{
-            LSPAudioPlayer* player1 = LSPAudioPlayer.sharedInstance;
-            LSPAudioPlayer* player2 = LSPAudioPlayer.sharedInstance;
-            
-            expect(player1).to.beIdenticalTo(player2);
-            
-            player1 = nil;
-            player2 = nil;
-        });
-    });
-    
     describe(@"playFromURLString:", ^{
-        __block LSPAudioPlayer* player = LSPAudioPlayer.sharedInstance;
+        __block LSPAudioPlayer* player = LSPAudioPlayer.new;
         __block OCMockObject *playerMock;
         __block NSString* file = @"~/Documents/banana.mp3";
         
@@ -67,7 +55,7 @@ context(@"LSPAudioPlayer", ^{
         
         it(@"transforms a URL-like string into a NSURL, calling configureWithURL", ^{
             NSString* tildeString = [file stringByExpandingTildeInPath];
-            NSURL* expectedUrl = [NSURL fileURLWithPath:[tildeString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] isDirectory:NO];
+            NSURL* expectedUrl = [NSURL fileURLWithPath:[tildeString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet] isDirectory:NO];
             
             [[playerMock expect] playFromURL:expectedUrl];
             
@@ -76,7 +64,7 @@ context(@"LSPAudioPlayer", ^{
     });
     
     describe(@"playFromURL:", ^{
-        __block LSPAudioPlayer* player = LSPAudioPlayer.sharedInstance;
+        __block LSPAudioPlayer* player = LSPAudioPlayer.new;
         
         afterEach(^{
             [player resetPlayer];
@@ -87,7 +75,7 @@ context(@"LSPAudioPlayer", ^{
         });
         
         it(@"immediately starts playing file if it is not the previously-called file", ^{
-            AVQueuePlayer* queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer* queuePlayer = player.player;
             
             expect(queuePlayer.items).to.beEmpty();
             
@@ -98,7 +86,7 @@ context(@"LSPAudioPlayer", ^{
         });
         
         it(@"doesn't create a new item when called again with the previous file", ^{
-            AVQueuePlayer* queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer* queuePlayer = player.player;
             
             [player playFromURL:audioFile1];
             expect(queuePlayer.items).to.haveCountOf(1);
@@ -114,7 +102,7 @@ context(@"LSPAudioPlayer", ^{
         });
 
         it(@"sets up a new file to play if it is different than the last", ^{
-            AVQueuePlayer* queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer* queuePlayer = player.player;
             
             [player playFromURL:audioFile1];
             NSURL* oldPath = player.previousPath;
@@ -155,10 +143,10 @@ context(@"LSPAudioPlayer", ^{
     describe(@"stop", ^{
         SETUP_AND_RESET_PLAYER
         
-        __block AVQueuePlayer* queuePlayer = LSPAudioPlayer.player;
+        __block AVQueuePlayer* queuePlayer = player.player;
         
         beforeAll(^{
-            queuePlayer = LSPAudioPlayer.player;
+            queuePlayer = player.player;
         });
         
         beforeEach(^{
@@ -212,7 +200,7 @@ context(@"LSPAudioPlayer", ^{
         beforeEach(^{
             [player playFromURL:audioFile1];
             
-            AVQueuePlayer *queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer *queuePlayer = player.player;
             destinationTime = [player timeFromProgress:.5];
             CMTime seekTolerance = CMTimeMake(1, 100);
             [queuePlayer seekToTime:destinationTime toleranceBefore:seekTolerance toleranceAfter:seekTolerance];
@@ -231,7 +219,7 @@ context(@"LSPAudioPlayer", ^{
         
         beforeEach(^{
             [player playFromURL:audioFile1];
-            AVQueuePlayer *queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer *queuePlayer = player.player;
             durationTime = queuePlayer.currentItem.duration;
         });
         
@@ -249,7 +237,7 @@ context(@"LSPAudioPlayer", ^{
         });
         
         it(@"should return the player's current playback status", ^{
-            AVQueuePlayer *queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer *queuePlayer = player.player;
             expect(player.status).to.equal(queuePlayer.status);
         });
     });
@@ -308,7 +296,7 @@ context(@"LSPAudioPlayer", ^{
     
     describe(@"resetPlayer", ^{
         __block OCMockObject *ncStub;
-        __block LSPAudioPlayer* player = LSPAudioPlayer.sharedInstance;
+        __block LSPAudioPlayer* player = LSPAudioPlayer.new;
         
         beforeEach(^{
             ncStub = OCMPartialMock(NSNotificationCenter.defaultCenter);
@@ -344,7 +332,7 @@ context(@"LSPAudioPlayer", ^{
             
             AVPlayerItem* item = [AVPlayerItem playerItemWithURL:audioFile1];
             
-            AVQueuePlayer* queuePlayer = LSPAudioPlayer.player;
+            AVQueuePlayer* queuePlayer = player.player;
             [queuePlayer insertItem:item afterItem:nil];
             
             expect(queuePlayer.items).to.haveCountOf(1);

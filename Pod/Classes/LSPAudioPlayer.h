@@ -8,24 +8,33 @@
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
 
+
+NS_ASSUME_NONNULL_BEGIN
+
+
 @interface LSPAudioPlayer : NSObject
 
-@property (nonatomic, strong) NSURL* previousPath;
+@property (nonatomic, readonly) AVQueuePlayer *player;
+@property (nonatomic, null_resettable) NSURL* previousPath;
 @property (nonatomic, readonly, getter = isPlaying) BOOL playing;
 
-+ (LSPAudioPlayer*)sharedInstance;
-+ (AVQueuePlayer*)player;
-
+- (id)addProgressObserver:(void (^)(CMTime time))observer;
 - (CMTime)currentTime;
 - (CMTime)duration;
+- (void)jumpToProgress:(Float64)progress;
 - (void)play;
 - (void)playFromURL:(NSURL*)url;
 - (void)playFromURLString:(NSString*)url;
 - (void)pause;
+- (void)removeProgressObserver:(id)observer;
 - (void)resetPlayer;
+- (void)setVolume:(float)volume;
 - (AVPlayerStatus)status;
 - (void)stop;
 - (CMTime)timeFromProgress:(Float64)progress;
 - (void)togglePlayback;
 
 @end
+
+
+NS_ASSUME_NONNULL_END
