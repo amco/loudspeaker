@@ -70,7 +70,7 @@
     }
     else
     {
-        self.configuration = LSPConfigurationBuilder.defaultConfiguration;
+        self.configuration = [LSPConfigurationBuilder.defaultConfiguration build];
         self.audioVC = [LSPAudioViewController.alloc initWithConfiguration:self.configuration];
         CGFloat playerHeight = 60;
         self.audioVC.view.frame = CGRectMake(0, CGRectGetHeight(self.view.frame) - playerHeight, CGRectGetWidth(self.view.frame), playerHeight);

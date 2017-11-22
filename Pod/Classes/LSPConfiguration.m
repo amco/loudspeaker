@@ -21,7 +21,7 @@
 }
 
 
-+ (LSPConfiguration *)configurationWithBuilder:(nullable void (^)(LSPConfigurationBuilder *))builderBlock
++ (LSPConfiguration *)configurationWithBuilder:(void (^)(LSPConfigurationBuilder *))builderBlock
 {
     LSPConfigurationBuilder *builder = LSPConfigurationBuilder.defaultConfiguration;
     builderBlock(builder);

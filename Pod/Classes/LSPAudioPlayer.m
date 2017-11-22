@@ -37,7 +37,7 @@
 - (void)playFromURLString:(NSString*)urlString
 {
     NSString *tildeString = [urlString stringByExpandingTildeInPath];
-    NSURL *url = [NSURL fileURLWithPath:[tildeString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] isDirectory:NO];
+    NSURL *url = [NSURL fileURLWithPath:[tildeString stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet] isDirectory:NO];
     [self playFromURL:url];
 }
 

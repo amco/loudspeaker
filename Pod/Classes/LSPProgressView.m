@@ -32,6 +32,12 @@
 }
 
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    return [self initForAutoLayout];
+}
+
+
 + (instancetype)newAutoLayoutView
 {
     LSPProgressView *view = [super new];
@@ -77,7 +83,7 @@
     updatedFrame.size.width = MIN(CGRectGetWidth(self.progressBackground.frame), CGRectGetWidth(updatedFrame) * amount);
     self.progressBar.frame = updatedFrame;
     
-    self.progressBar.accessibilityLabel = [NSString stringWithFormat:@"%i%%", (NSInteger) round(updatedFrame.size.width / CGRectGetWidth(self.progressBackground.frame) * 100)];
+    self.progressBar.accessibilityLabel = [NSString stringWithFormat:@"%i%%", (int) round(updatedFrame.size.width / CGRectGetWidth(self.progressBackground.frame) * 100)];
 }
 
 

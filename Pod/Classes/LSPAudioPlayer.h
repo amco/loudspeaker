@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface LSPAudioPlayer : NSObject
 
 @property (nonatomic, readonly) AVQueuePlayer *player;
-@property (nonatomic, null_resettable) NSURL* previousPath;
+@property (nonatomic, nullable) NSURL* previousPath;
 @property (nonatomic, readonly, getter = isPlaying) BOOL playing;
 
 - (id)addProgressObserver:(void (^)(CMTime time))observer;

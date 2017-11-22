@@ -320,8 +320,6 @@ context(@"LSPAudioPlayer", ^{
         });
         
         it(@"doesn't remove observers if previousPath is nil", ^{
-            player.previousPath = nil;
-            
             [[ncStub reject] removeObserver:player];
             [player resetPlayer];
             [ncStub verify];

@@ -21,15 +21,15 @@
     if (totalSeconds > 3600)
     {
         NSInteger hours = floor(totalSeconds / 3600);
-        formattedTime = [NSString stringWithFormat:@"%i:%02i:%02i", hours, minutes, seconds];
+        formattedTime = [NSString stringWithFormat:@"%ld:%02ld:%02ld", (long)hours, (long)minutes, (long)seconds];
     }
     else if (totalSeconds > 60)
     {
-        formattedTime = [NSString stringWithFormat:@"%02i:%02i", minutes, seconds];
+        formattedTime = [NSString stringWithFormat:@"%02ld:%02ld", (long)minutes, (long)seconds];
     }
     else
     {
-        formattedTime = [NSString stringWithFormat:@"00:%02i", seconds];
+        formattedTime = [NSString stringWithFormat:@"00:%02ld", (long)seconds];
     }
     
     return formattedTime;

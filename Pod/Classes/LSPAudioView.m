@@ -37,6 +37,12 @@
 }
 
 
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    return [self initForAutoLayout];
+}
+
+
 + (instancetype)newAutoLayoutView
 {
     LSPAudioView *view = [super new];

@@ -37,10 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic) CGFloat volume;
 
-+ (LSPConfiguration *)configurationWithBuilder:(nullable void (^)(LSPConfigurationBuilder *))builderBlock;
-+ (LSPConfiguration *)defaultConfiguration;
++ (nullable LSPConfiguration *)configurationWithBuilder:(void (^)(LSPConfigurationBuilder *builder))builderBlock;
++ (LSPConfigurationBuilder *)defaultConfiguration;
 
-- (LSPConfiguration *)build;
+- (nullable LSPConfiguration *)build;
 
 @end
 

@@ -50,7 +50,7 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
 #pragma mark - Lifecycle
 - (instancetype)initWithConfiguration:(LSPConfiguration *)configuration
 {
-    self = [super init];
+    self = [super initWithNibName:nil bundle:nil];
     if (!self) return nil;
 
     _configuration = configuration;
@@ -60,6 +60,12 @@ static void * LSPAudioViewControllerContext = &LSPAudioViewControllerContext;
     [_player setVolume:_configuration.volume];
 
     return self;
+}
+
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    return nil;
 }
 
 
